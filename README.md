@@ -19,3 +19,5 @@ To start the server :
 ```bash
 node server.js
 ```
+![C1](Capture.PNG)
+![C2](Capture2.PNG)
