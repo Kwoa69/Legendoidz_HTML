@@ -3,17 +3,16 @@ const { exec } = require('child_process');
 const bodyParser = require('body-parser');
 const auth = require('basic-auth');
 const fs = require('fs');
+const morgan = require('morgan');
 
 const app = express();
 const port = 3001;
 
-// Lire les informations depuis le fichier de configuration
 const configFile = fs.readFileSync('config.json');
 const config = JSON.parse(configFile);
 const credentials = config.credentials;
 const serverConfig = config.server;
 
-// Middleware d'authentification de base
 const basicAuth = (req, res, next) => {
     const user = auth(req);
 
@@ -25,15 +24,24 @@ const basicAuth = (req, res, next) => {
     return next();
 };
 
+const accessLogStream = fs.createWriteStream('access.log', { flags: 'a' });
+app.use(morgan('combined', { stream: accessLogStream }));
+
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
-// Utiliser l'authentification de base pour toutes les routes
 app.use(basicAuth);
 
 app.get('/', (req, res) => {
-    // Vous pouvez envoyer une page d'accueil ou rediriger vers une autre page ici
     res.sendFile(__dirname + '/public/index.html');
+});
+
+app.post('/buttonClick', (req, res) => {
+    const { button, username } = req.body;
+    const logMessage = `L'utilisateur ${username} a cliqué sur le bouton : ${button}`;
+    console.log(logMessage);
+    accessLogStream.write(logMessage + '\n');
+    res.send(`Clic sur le bouton enregistré : ${button}`);
 });
 
 app.post('/runRcon', (req, res) => {
@@ -46,8 +54,7 @@ app.post('/runRcon', (req, res) => {
         }
 
         console.log(`Sortie de rcon.exe : ${stdout}`);
-        
-        // Si la commande est 'players', renvoyer la sortie au client
+
         if (req.body.command.toLowerCase() === 'players') {
             return res.send(stdout);
         } else {
@@ -56,7 +63,6 @@ app.post('/runRcon', (req, res) => {
     });
 });
 
-// Ajouter une nouvelle route pour la commande 'banid'
 app.post('/runRconBanId', (req, res) => {
     const banIdCommand = `rcon.exe -a ${serverConfig.ip}:${serverConfig.port} -p ${serverConfig.rconPassword} banid ${req.body.banIdValue}`;
 
