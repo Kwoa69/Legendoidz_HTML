@@ -1,0 +1,14 @@
+{
+  "name": "Legendoidz_HTML",
+  "version": "1.0.0",
+  "description": "HTML Management Panel for Project Zomboid Game Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0",
+    "basic-auth": "^2.0.1"
+  }
+}

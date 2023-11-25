@@ -1,0 +1,11 @@
+{
+  "credentials": {
+    "username": "USERNAME",
+    "password": "PASSWORD"
+  },
+  "server": {
+    "ip": "IP.OF.YOUR.SERVER",
+    "port": RCONPORT,
+    "rconPassword": "YourRconPassword"
+  }
+}
