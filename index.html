@@ -17,7 +17,8 @@
             color: #007bff;
         }
 
-        #output, #websocket-output {
+        #output,
+        #websocket-output {
             margin-top: 20px;
             padding: 10px;
             background-color: #fff;
@@ -62,8 +63,8 @@
 
 <body>
 
-    <h1>Panel d'Administration - Legendoid'Z RCON</h1>
-    
+        <h1>Panel d'Administration - Legendoid'Z RCON</h1>
+
     <div id="websocket-output"></div>
 
     <button onclick="runRcon('players')">Liste des Joueurs</button>
@@ -114,12 +115,20 @@
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            document.getElementById("websocket-output").innerHTML = '<pre>' + data.output + '</pre>';
-
-            setTimeout(function () {
-                document.getElementById("websocket-output").innerHTML = '';
-            }, 15000);
+            displayOutput(data.output);
         };
+
+        function displayOutput(output) {
+            const outputContainer = document.getElementById("websocket-output");
+            const outputElement = document.createElement("pre");
+            outputElement.textContent = output;
+            outputContainer.appendChild(outputElement);
+
+            // Effacez l'output après 15 secondes
+            setTimeout(function () {
+                outputElement.remove();
+            }, 15000);
+        }
 
         function runRcon(command) {
             var fullCommand = command;
@@ -134,7 +143,7 @@
                 .then(response => response.text())
                 .then(data => {
                     console.log('Réponse du serveur :', data);
-                    document.getElementById("output").innerHTML = '<pre>' + data + '</pre>';
+                    displayOutput(data);
                 })
                 .catch(error => {
                     console.error('Erreur lors de l\'envoi de la commande RCON:', error);
@@ -142,26 +151,24 @@
         }
 
         function runRconBanId() {
-    var banIdValue = document.getElementById("banIdInput").value;
+            var banIdValue = document.getElementById("banIdInput").value;
 
-    fetch('/runRconBanId', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ banIdValue: banIdValue }),
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log('Réponse du serveur (banid) :', data);
-            
-            // Ajoutez le contenu de la réponse dans le div websocket-output
-            document.getElementById("websocket-output").innerHTML = '<pre>' + data + '</pre>';
-        })
-        .catch(error => {
-            console.error('Erreur lors de l\'envoi de la commande RCON (banid):', error);
-        });
-}
+            fetch('/runRconBanId', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ banIdValue: banIdValue }),
+                })
+                .then(response => response.text())
+                .then(data => {
+                    console.log('Réponse du serveur (banid) :', data);
+                    displayOutput(data);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de l\'envoi de la commande RCON (banid):', error);
+                });
+        }
 
         function runRconAddUser() {
             var newUsername = document.getElementById("newUsernameInput").value;
@@ -172,23 +179,9 @@
                 return;
             }
 
+            // Utilisez runRcon pour exécuter la commande
             var fullCommand = `adduser ${newUsername} ${newPassword}`;
-
-            fetch('/runRconAddUser', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ newUsername: newUsername, newPassword: newPassword }),
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Réponse du serveur (adduser) :', data);
-                    document.getElementById("output").innerHTML = '<pre>' + data + '</pre>';
-                })
-                .catch(error => {
-                    console.error('Erreur lors de l\'envoi de la commande RCON (adduser):', error);
-                });
+            runRcon(fullCommand);
         }
 
         function runRconRemoveUser() {
@@ -199,23 +192,9 @@
                 return;
             }
 
+            // Utilisez runRcon pour exécuter la commande
             var fullCommand = `removeuserfromwhitelist ${removeUsername}`;
-
-            fetch('/runRcon', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ command: fullCommand }),
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Réponse du serveur (removeuserfromwhitelist) :', data);
-                    document.getElementById("output").innerHTML = '<pre>' + data + '</pre>';
-                })
-                .catch(error => {
-                    console.error('Erreur lors de l\'envoi de la commande RCON (removeuserfromwhitelist):', error);
-                });
+            runRcon(fullCommand);
         }
 
         function runCustomCommand() {
@@ -226,21 +205,8 @@
                 return;
             }
 
-            fetch('/runRcon', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ command: customCommand }),
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Réponse du serveur (custom command) :', data);
-                    document.getElementById("output").innerHTML = '<pre>' + data + '</pre>';
-                })
-                .catch(error => {
-                    console.error('Erreur lors de l\'envoi de la commande RCON (custom command):', error);
-                });
+            // Utilisez runRcon pour exécuter la commande
+            runRcon(customCommand);
         }
     </script>
 
