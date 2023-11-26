@@ -15,6 +15,7 @@
 
         h1 {
             color: #007bff;
+            text-align: center;
         }
 
         #output,
@@ -29,8 +30,6 @@
         }
 
         button {
-            background-color: #007bff;
-            color: #fff;
             padding: 10px;
             margin: 5px;
             border: none;
@@ -38,9 +37,22 @@
             cursor: pointer;
         }
 
+        /* Boutons en vert */
+        button.green {
+            background-color: #00ff00;
+            color: #fff;
+        }
+
+        /* Boutons en rouge */
+        button.red {
+            background-color: #ff0000;
+            color: #fff;
+        }
+
         .inline-group {
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .input-group {
@@ -63,153 +75,146 @@
 
 <body>
 
-        <h1>Panel d'Administration - Legendoid'Z RCON</h1>
+    <h1>Panel d'Administration - Legendoid'Z RCON</h1>
 
     <div id="websocket-output"></div>
 
-    <button onclick="runRcon('players')">Liste des Joueurs</button>
-
-    <div class="inline-group">
-        <div class="input-group">
-            <label for="commandInput">Commande personnalisée :</label>
-            <input type="text" id="commandInput" placeholder="Entrez votre commande">
+            <button class="green" onclick="runRcon('players')">Liste des Joueurs</button>
         </div>
-        <button onclick="runCustomCommand()">Exécuter Commande</button>
-    </div>
+<br>
+        <button class="green" onclick="runRcon('gunshot')">Gunshot Event</button>
+        <button class="green" onclick="runRcon('startrain')">Démarrer Pluie</button>
+        <button class="green" onclick="runRcon('stoprain')">Arrêter Pluie</button>
+        <button class="green" onclick="runRcon('chopper')">Hélicoptère Event</button>
 
-    <button onclick="runRcon('gunshot')">Gunshot Event</button>
-    <button onclick="runRcon('startrain')">Démarrer Pluie</button>
-    <button onclick="runRcon('stoprain')">Arrêter Pluie</button>
-    <button onclick="runRcon('chopper')">Chopper Event</button>
-
-    <div class="inline-group">
-        <div class="input-group">
-            <label for="banIdInput">Valeur pour banid :</label>
-            <input type="text" id="banIdInput" placeholder="STEAM:ID">
+        <div class="inline-group">
+            <div class="input-group">
+                <label for="banIdInput">Valeur pour banid :</label>
+                <input type="text" id="banIdInput" placeholder="STEAM:ID">
+            </div>
+            <button class="red" onclick="runRconBanId()">Ban ID</button>
         </div>
-        <button onclick="runRconBanId()">Ban ID</button>
-    </div>
 
-    <div class="inline-group">
-        <div class="input-group">
-            <label for="newUsernameInput">Nouveau pseudo :</label>
-            <input type="text" id="newUsernameInput" placeholder="Entrez le pseudo">
+        <div class="inline-group">
+            <div class="input-group">
+                <label for="newUsernameInput">Nouveau pseudo :</label>
+                <input type="text" id="newUsernameInput" placeholder="Entrez le pseudo">
+            </div>
+            <div class="input-group">
+                <label for="newPasswordInput">Nouveau mot de passe :</label>
+                <input type="password" id="newPasswordInput" placeholder="Entrez le mot de passe">
+            </div>
+            <button class="green" onclick="runRconAddUser()">Ajouter un utilisateur</button>
         </div>
-        <div class="input-group">
-            <label for="newPasswordInput">Nouveau mot de passe :</label>
-            <input type="password" id="newPasswordInput" placeholder="Entrez le mot de passe">
+
+        <div class="inline-group">
+            <div class="input-group">
+                <label for="removeUserInput">Utilisateur à retirer de la liste blanche :</label>
+                <input type="text" id="removeUserInput" placeholder="Entrez le pseudo">
+            </div>
+            <button class="red" onclick="runRconRemoveUser()">Retirer de la liste blanche</button>
         </div>
-        <button onclick="runRconAddUser()">Ajouter un utilisateur</button>
-    </div>
 
-    <div class="inline-group">
-        <div class="input-group">
-            <label for="removeUserInput">Utilisateur à retirer de la liste blanche :</label>
-            <input type="text" id="removeUserInput" placeholder="Entrez le pseudo">
-        </div>
-        <button onclick="runRconRemoveUser()">Retirer de la liste blanche</button>
-    </div>
+        <script>
+            const ws = new WebSocket(`ws://${window.location.host}`);
 
-    <script>
-        const ws = new WebSocket(`ws://${window.location.host}`);
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                displayOutput(data.output);
+            };
 
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            displayOutput(data.output);
-        };
+            function displayOutput(output) {
+                const outputContainer = document.getElementById("websocket-output");
+                const outputElement = document.createElement("pre");
+                outputElement.textContent = output;
+                outputContainer.appendChild(outputElement);
 
-        function displayOutput(output) {
-            const outputContainer = document.getElementById("websocket-output");
-            const outputElement = document.createElement("pre");
-            outputElement.textContent = output;
-            outputContainer.appendChild(outputElement);
-
-            // Effacez l'output après 15 secondes
-            setTimeout(function () {
-                outputElement.remove();
-            }, 15000);
-        }
-
-        function runRcon(command) {
-            var fullCommand = command;
-
-            fetch('/runRcon', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ command: fullCommand }),
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Réponse du serveur :', data);
-                    displayOutput(data);
-                })
-                .catch(error => {
-                    console.error('Erreur lors de l\'envoi de la commande RCON:', error);
-                });
-        }
-
-        function runRconBanId() {
-            var banIdValue = document.getElementById("banIdInput").value;
-
-            fetch('/runRconBanId', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ banIdValue: banIdValue }),
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Réponse du serveur (banid) :', data);
-                    displayOutput(data);
-                })
-                .catch(error => {
-                    console.error('Erreur lors de l\'envoi de la commande RCON (banid):', error);
-                });
-        }
-
-        function runRconAddUser() {
-            var newUsername = document.getElementById("newUsernameInput").value;
-            var newPassword = document.getElementById("newPasswordInput").value;
-
-            if (!newUsername || !newPassword) {
-                alert('Veuillez fournir un pseudo et un mot de passe.');
-                return;
+                // Effacez l'output après 15 secondes
+                setTimeout(function () {
+                    outputElement.remove();
+                }, 15000);
             }
 
-            // Utilisez runRcon pour exécuter la commande
-            var fullCommand = `adduser ${newUsername} ${newPassword}`;
-            runRcon(fullCommand);
-        }
+            function runRcon(command) {
+                var fullCommand = command;
 
-        function runRconRemoveUser() {
-            var removeUsername = document.getElementById("removeUserInput").value;
-
-            if (!removeUsername) {
-                alert('Veuillez fournir un pseudo.');
-                return;
+                fetch('/runRcon', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ command: fullCommand }),
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log('Réponse du serveur :', data);
+                        displayOutput(data);
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de l\'envoi de la commande RCON:', error);
+                    });
             }
 
-            // Utilisez runRcon pour exécuter la commande
-            var fullCommand = `removeuserfromwhitelist ${removeUsername}`;
-            runRcon(fullCommand);
-        }
+            function runRconBanId() {
+                var banIdValue = document.getElementById("banIdInput").value;
 
-        function runCustomCommand() {
-            var customCommand = document.getElementById("commandInput").value;
-
-            if (!customCommand) {
-                alert('Veuillez fournir une commande.');
-                return;
+                fetch('/runRconBanId', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ banIdValue: banIdValue }),
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log('Réponse du serveur (banid) :', data);
+                        displayOutput(data);
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de l\'envoi de la commande RCON (banid):', error);
+                    });
             }
 
-            // Utilisez runRcon pour exécuter la commande
-            runRcon(customCommand);
-        }
-    </script>
+            function runRconAddUser() {
+                var newUsername = document.getElementById("newUsernameInput").value;
+                var newPassword = document.getElementById("newPasswordInput").value;
 
-</body>
+                if (!newUsername || !newPassword) {
+                    alert('Veuillez fournir un pseudo et un mot de passe.');
+                    return;
+                }
 
-</html>
+                // Utilisez runRcon pour exécuter la commande
+                var fullCommand = `adduser ${newUsername} ${newPassword}`;
+                runRcon(fullCommand);
+            }
+
+            function runRconRemoveUser() {
+                var removeUsername = document.getElementById("removeUserInput").value;
+
+                if (!removeUsername) {
+                    alert('Veuillez fournir un pseudo.');
+                    return;
+                }
+
+                // Utilisez runRcon pour exécuter la commande
+                var fullCommand = `removeuserfromwhitelist ${removeUsername}`;
+                runRcon(fullCommand);
+            }
+
+            function runCustomCommand() {
+                var customCommand = document.getElementById("commandInput").value;
+
+                if (!customCommand) {
+                    alert('Veuillez fournir une commande.');
+                    return;
+                }
+
+                // Utilisez runRcon pour exécuter la commande
+                runRcon(customCommand);
+            }
+        </script>
+
+    </body>
+
+    </html>
