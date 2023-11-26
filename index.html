@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel d'Administration - Legendoid'Z RCON</title>
+    <title>Panel d'Administration - Legendoid'Z RCON (163.5.143.20)</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             margin: 20px;
             padding: 20px;
             text-align: center;
-            background-color: #121212;
+            background-color: #121212; /* Fond sombre */
             color: #ffffff;
         }
 
         h1 {
-            background-color: #222;
-            color: #4caf50;
+            background-color: #222; /* Fond plus foncé pour le titre */
+            color: #4caf50; /* Couleur verte plus douce pour le titre */
             padding: 20px;
             border-radius: 8px;
         }
@@ -25,7 +24,7 @@
         label {
             display: block;
             margin-top: 10px;
-            color: #4caf50;
+            color: #4caf50; /* Couleur verte plus douce pour les labels */
         }
 
         input {
@@ -38,7 +37,7 @@
         }
 
         button {
-            background-color: #4caf50;
+            background-color: #4caf50; /* Bouton vert */
             color: white;
             padding: 15px;
             border: none;
@@ -56,91 +55,62 @@
             border-radius: 8px;
         }
 
-        /* Styles pour aligner les labels et les champs de saisie */
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .input-group label,
-        .input-group input {
-            margin-bottom: 5px;
-        }
-
-        /* Styles pour aligner les éléments sur la même ligne */
-        .inline-group {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .inline-group label {
-            margin-right: 10px;
-        }
-
-        /* Styles pour centrer la section */
-        .centered-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        
     </style>
 </head>
-
 <body>
 
     <h1>Panel d'Administration - Legendoid'Z RCON</h1>
     <div id="output"></div>
 
-    <div class="inline-group">
-        <div class="input-group">
-            <label for="playerName">Joueur cible :</label>
-            <input type="text" id="playerName" placeholder="Nom sans espaces">
-        </div>
-        <button onclick="runRcon('kickuser')">Kicker le joueur cible</button>
-    </div>
+    <button onclick="runRcon('players')">Liste des Joueurs</button>
 
-    <div class="inline-group">
-        <div class="input-group">
-            <label for="itemName">Nom de l'objet ( Ex : Base.Axe TC.Boombox ) :</label>
-            <input type="text" id="itemName" placeholder="Entrez le nom de l'objet">
-        </div>
-        <div class="input-group">
-            <label for="itemQuantity">Quantité ( Vide pour 1 ) :</label>
-            <input type="text" id="itemQuantity" placeholder="Entrez la quantité">
-        </div>
-        <button onclick="runRcon('additem')">Donner Objet & Quantité au Joueur cible</button>
-    </div>
+    <label for="playerName">Joueur cible :</label>
+    <input type="text" id="playerName" placeholder="Nom sans espaces">
+
+    <br>
+
+    <button onclick="runRcon('kickuser')">Kicker le joueur cible</button>
+
+    <label for="itemName">Nom de l'objet ( Ex : Base.Axe TC.Boombox ) :</label>
+    <input type="text" id="itemName" placeholder="Entrez le nom de l'objet">
+
+    <label for="itemQuantity">Quantité ( Vide pour 1 ) :</label>
+    <input type="text" id="itemQuantity" placeholder="Entrez la quantité">
+
+    <br>
+
+    <button onclick="runRcon('additem')">Donner Objet & Quantité au Joueur cible</button>
+	<br><br><br><br><br><br>
 
     <button onclick="runRcon('gunshot')">Gunshot Event</button>
+    <br>
+
     <button onclick="runRcon('startrain')">Démarrer Pluie</button>
     <button onclick="runRcon('stoprain')">Arrêter Pluie</button>
 
-    <div class="centered-section">
-        <div class="inline-group">
-            <div class="input-group">
-                <label for="banIdValue">Valeur pour banid :</label>
-                <input type="text" id="banIdValue" placeholder="STEAM:ID">
-            </div>
-            <button onclick="runRconBanId()">Ban ID ( TOUT LES AUTRES CHAMPS DOIVENT ETRE VIDE )</button>
-        </div>
+    <label for="banIdValue">Valeur pour banid :</label>
+    <input type="text" id="banIdValue" placeholder="STEAM:ID">
 
-        <!-- Ajout d'un espace vertical -->
-        <br>
+    <button onclick="runRconBanId()">Ban ID ( TOUT LES AUTRES CHAMPS DOIVENT ETRE VIDE )</button>
+    <br><br><br><br><br><br>
+    
 
-        <div class="input-group">
-            <label for="newUsername">Nouveau pseudo :</label>
-            <input type="text" id="newUsername" placeholder="Entrez le pseudo">
-        </div>
 
-        <div class="input-group">
-            <label for="newPassword">Nouveau mot de passe :</label>
-            <input type="password" id="newPassword" placeholder="Entrez le mot de passe">
-        </div>
-        <button onclick="runRconAddUser()">Ajouter un utilisateur a la base de donnée</button>
+    <!-- Modification pour aligner les labels et les champs de saisie -->
+	<button onclick="runRconAddUser()">Ajouter un utilisateur a la base de donnée</button>
+    <div class="input-group">
+		
+        <label for="newUsername">Nouveau pseudo :</label>
+        <input type="text" id="newUsername" placeholder="Entrez le pseudo">
     </div>
+
+    <div class="input-group">
+        <label for="newPassword">Nouveau mot de passe :</label>
+        <input type="password" id="newPassword" placeholder="Entrez le mot de passe">
+    </div>
+
+    
 
     <script>
         function runRcon(command) {
@@ -154,50 +124,50 @@
                 (itemQuantity ? ' ' + itemQuantity : '');
 
             fetch('/runRcon', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ command: fullCommand }),
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Réponse du serveur :', data);
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ command: fullCommand }),
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Réponse du serveur :', data);
 
-                    document.getElementById("output").innerHTML = '<pre>' + data + '</pre>';
-
-                    setTimeout(function () {
-                        document.getElementById("output").innerHTML = '';
-                    }, 15000);
-                })
-                .catch(error => {
-                    console.error('Erreur lors de l\'envoi de la commande RCON:', error);
-                });
+                document.getElementById("output").innerHTML = '<pre>' + data + '</pre>';
+           
+                setTimeout(function() {
+                    document.getElementById("output").innerHTML = '';
+                }, 15000);
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'envoi de la commande RCON:', error);
+            });
         }
 
         function runRconBanId() {
             var banIdValue = document.getElementById("banIdValue").value;
 
             fetch('/runRconBanId', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ banIdValue: banIdValue }),
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Réponse du serveur (banid) :', data);
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ banIdValue: banIdValue }),
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Réponse du serveur (banid) :', data);
 
-                    document.getElementById("output").innerHTML = '<pre>' + data + '</pre>';
+                document.getElementById("output").innerHTML = '<pre>' + data + '</pre>';
 
-                    setTimeout(function () {
-                        document.getElementById("output").innerHTML = '';
-                    }, 15000);
-                })
-                .catch(error => {
-                    console.error('Erreur lors de l\'envoi de la commande RCON (banid):', error);
-                });
+                setTimeout(function() {
+                    document.getElementById("output").innerHTML = '';
+                }, 15000);
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'envoi de la commande RCON (banid):', error);
+            });
         }
 
         function runRconAddUser() {
@@ -212,28 +182,27 @@
             var fullCommand = `adduser ${newUsername} ${newPassword}`;
 
             fetch('/runRconAddUser', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ newUsername: newUsername, newPassword: newPassword }),
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Réponse du serveur (adduser) :', data);
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ newUsername: newUsername, newPassword: newPassword }),
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Réponse du serveur (adduser) :', data);
 
-                    document.getElementById("output").innerHTML = '<pre>' + data + '</pre>';
+                document.getElementById("output").innerHTML = '<pre>' + data + '</pre>';
 
-                    setTimeout(function () {
-                        document.getElementById("output").innerHTML = '';
-                    }, 15000);
-                })
-                .catch(error => {
-                    console.error('Erreur lors de l\'envoi de la commande RCON (adduser):', error);
-                });
+                setTimeout(function() {
+                    document.getElementById("output").innerHTML = '';
+                }, 15000);
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'envoi de la commande RCON (adduser):', error);
+            });
         }
     </script>
 
 </body>
-
 </html>
