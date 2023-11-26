@@ -76,6 +76,20 @@ app.post('/runRconBanId', (req, res) => {
         res.send('Commande RCON (banid) exécutée avec succès !');
     });
 });
+		app.post('/runRconAddUser', (req, res) => {
+    const { newUsername, newPassword } = req.body;
+    const addUserCommand = `rcon.exe -a ${serverConfig.ip}:${serverConfig.port} -p ${serverConfig.rconPassword} "adduser ${newUsername} ${newPassword}"`;
+
+    exec(addUserCommand, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Erreur lors de l'exécution de la commande adduser : ${error}`);
+            return res.status(500).send('Erreur lors de l\'exécution de la commande adduser');
+        }
+
+        console.log(`Sortie de la commande adduser : ${stdout}`);
+        res.send('Commande adduser exécutée avec succès !');
+    });
+});
 
 app.listen(port, () => {
     console.log(`Serveur démarré sur le port ${port}`);
