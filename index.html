@@ -122,6 +122,22 @@
         <button class="red" onclick="runRconKickUser()">Kick User</button>
     </div>
 
+    <div class="inline-group">
+        <div class="input-group">
+            <label for="addItemUserInput">Utilisateur :</label>
+            <input type="text" id="addItemUserInput" placeholder="Entrez le pseudo">
+        </div>
+        <div class="input-group">
+            <label for="addItemNameInput">Item :</label>
+            <input type="text" id="addItemNameInput" placeholder="Entrez le nom de l'item">
+        </div>
+        <div class="input-group">
+            <label for="addItemQuantityInput">Quantité :</label>
+            <input type="text" id="addItemQuantityInput" placeholder="Entrez la quantité">
+        </div>
+        <button class="green" onclick="runRconAddItem()">Ajouter un item</button>
+    </div>
+
     <script>
         const ws = new WebSocket(`ws://${window.location.host}`);
 
@@ -222,17 +238,23 @@
             runRcon(fullCommand);
         }
 
-        function runCustomCommand() {
-            var customCommand = document.getElementById("commandInput").value;
+        function runRconAddItem() {
+            var addItemUser = document.getElementById("addItemUserInput").value;
+            var addItemName = document.getElementById("addItemNameInput").value;
+            var addItemQuantity = document.getElementById("addItemQuantityInput").value;
 
-            if (!customCommand) {
-                alert('Veuillez fournir une commande.');
+            if (!addItemUser || !addItemName || !addItemQuantity) {
+                alert('Veuillez remplir tous les champs.');
                 return;
             }
 
             // Utilisez runRcon pour exécuter la commande
-            runRcon(customCommand);
+            var fullCommand = `additem ${addItemUser} ${addItemName} ${addItemQuantity}`;
+            runRcon(fullCommand);
         }
+
+        // ... Vos autres fonctions existantes ...
+
     </script>
 
 </body>
