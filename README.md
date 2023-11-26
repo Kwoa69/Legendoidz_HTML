@@ -22,5 +22,16 @@ To start the server :
 ```bash
 node server.js
 ```
+**available commands**
+```bash
+players
+kickuser
+additem
+gunshot
+startrain
+stoprain
+banid
+adduser
+```
 ![C1](Capture.PNG)
 ![C2](Capture2.PNG)
