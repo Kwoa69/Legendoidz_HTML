@@ -2,6 +2,10 @@
   "credentials": {
     "username": "USERNAME",
     "password": "PASSWORD"
+    "additionalUser": {
+      "username": "AdditionalUser",
+      "password": "AdditionalPassword"
+    }
   },
   "server": {
     "ip": "IP.OF.YOUR.SERVER",
