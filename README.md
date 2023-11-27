@@ -15,7 +15,6 @@ https://github.com/gorcon/rcon-cli/releases/tag/v0.10.3
 
 [3] **Before running the server, don't forget to modify the values in the config.json file.**
 
-[4] **Create a folder named 'public' and place 'index.html' in it**
 
 To start the server :
 
