@@ -31,6 +31,7 @@ startrain
 stoprain
 banid
 adduser
+kickuser
 ```
 ![C1](Capture.PNG)
 ![C2](Capture2.PNG)
