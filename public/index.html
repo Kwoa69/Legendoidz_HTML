@@ -78,7 +78,6 @@
     <h1>Panel d'Administration - Legendoid'Z RCON</h1>
 
     <div id="websocket-output"></div>
-
     <button class="green" onclick="runRcon('players')">Liste des Joueurs</button>
     <br>
     <button class="green" onclick="runRcon('gunshot')">Gunshot Event</button>
@@ -86,12 +85,14 @@
     <button class="green" onclick="runRcon('stoprain')">Arrêter Pluie</button>
     <button class="green" onclick="runRcon('chopper')">Hélicoptère Event</button>
 
-    <div class="inline-group">
+
+<div class="inline-group">
         <div class="input-group">
-            <label for="banIdInput">Valeur pour banid :</label>
-            <input type="text" id="banIdInput" placeholder="STEAM:ID">
+
+            <label for="kickUserInput">Utilisateur à expulser :</label>
+            <input type="text" id="kickUserInput" placeholder="Entrez le pseudo">
         </div>
-        <button class="red" onclick="runRconBanId()">Ban ID</button>
+        <button class="red" onclick="runRconKickUser()">Kick User</button>
     </div>
 
     <div class="inline-group">
@@ -105,24 +106,7 @@
         </div>
         <button class="green" onclick="runRconAddUser()">Ajouter un utilisateur</button>
     </div>
-
-    <div class="inline-group">
-        <div class="input-group">
-            <label for="removeUserInput">Utilisateur à retirer de la liste blanche :</label>
-            <input type="text" id="removeUserInput" placeholder="Entrez le pseudo">
-        </div>
-        <button class="red" onclick="runRconRemoveUser()">Retirer de la liste blanche</button>
-    </div>
-
-    <div class="inline-group">
-        <div class="input-group">
-            <label for="kickUserInput">Utilisateur à expulser :</label>
-            <input type="text" id="kickUserInput" placeholder="Entrez le pseudo">
-        </div>
-        <button class="red" onclick="runRconKickUser()">Kick User</button>
-    </div>
-
-    <div class="inline-group">
+	    <div class="inline-group">
         <div class="input-group">
             <label for="addItemUserInput">Utilisateur :</label>
             <input type="text" id="addItemUserInput" placeholder="Entrez le pseudo">
@@ -137,7 +121,24 @@
         </div>
         <button class="green" onclick="runRconAddItem()">Ajouter un item</button>
     </div>
+    <div class="inline-group">
+        <div class="input-group">
+            <label for="removeUserInput">Utilisateur à retirer de la liste blanche :</label>
+            <input type="text" id="removeUserInput" placeholder="Entrez le pseudo">
+        </div>
+        <button class="red" onclick="runRconRemoveUser()">Retirer de la liste blanche</button>
+    </div>
 
+    
+
+
+    <div class="inline-group">
+        <div class="input-group">
+            <label for="banIdInput">Valeur pour banid :</label>
+            <input type="text" id="banIdInput" placeholder="STEAM:ID">
+        </div>
+        <button class="red" onclick="runRconBanId()">Ban ID</button>
+    </div>
     <script>
         const ws = new WebSocket(`ws://${window.location.host}`);
 
